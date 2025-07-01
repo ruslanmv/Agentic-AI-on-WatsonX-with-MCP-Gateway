@@ -1,5 +1,6 @@
 
-#  Mastering the Model Context Protocol with the MCP Gateway
+#  Agentic-AI-on-WatsonX-with-MCP-Gateway
+
 ## A Developer's Guide to Agentic AI
 
 Welcome to the next frontier of AI development. In an era where Large Language Models (LLMs) have demonstrated incredible capabilities, the true challenge lies in moving beyond simple chat interfaces to build robust, autonomous systems that can solve complex, real-world problems. This is the domain of Agentic AI.
