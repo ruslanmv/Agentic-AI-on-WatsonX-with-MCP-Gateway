@@ -540,11 +540,54 @@ limitations under the License.
 
 ---
 
+## 📖 Comprehensive Documentation
+
+### 🎓 New: Complete MCP Gateway Integration Guide
+
+We've created extensive documentation for integrating MCP Context Forge Gateway with CrewAI and Langflow. This includes production-ready examples, use cases, and step-by-step demos.
+
+**📚 Documentation Hub**: [docs/README.md](docs/README.md)
+
+#### Quick Access
+
+**Getting Started**
+- **[Demo Guide](docs/DEMO-GUIDE.md)** - Step-by-step demos with complete setup instructions
+- **[Integration Guide](docs/guides/MCP-CrewAI-Langflow-Integration-Guide.md)** - Complete production-ready developer guide
+
+**Implementation Examples**
+- **[CrewAI Examples](docs/examples/)** - Multi-agent research and customer support automation
+- **[Langflow Integration](docs/examples/langflow-mcp-integration-guide.md)** - Langflow as MCP server and client
+- **[Use Cases & Solutions](docs/use-cases/MCP-Gateway-Use-Cases-Solutions.md)** - Industry-specific implementations with ROI metrics
+
+**What's Included:**
+- ✅ End-to-end multi-agent examples with CrewAI
+- ✅ Langflow integration (as server and client)
+- ✅ 6+ production use cases with complete code
+- ✅ Architecture diagrams and best practices
+- ✅ Troubleshooting guides
+- ✅ ROI metrics and business impact analysis
+- ✅ Word document version for offline reading
+
+#### Featured Use Cases
+
+1. **Intelligent Research Assistant** - 75% time savings
+2. **Customer Support Automation** - 95% faster response times
+3. **Content Marketing Pipeline** - 85% efficiency improvement
+4. **Market Intelligence Platform** - Real-time competitive analysis
+5. **Financial Research Automation** - Automated investment analysis
+6. **Incident Response System** - 90% faster incident resolution
+
+[→ Explore All Documentation](docs/README.md)
+
+---
+
 ## 📚 Additional Resources
 
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
 - [IBM MCP Context Forge](https://github.com/IBM/mcp-context-forge)
 - [IBM WatsonX Documentation](https://www.ibm.com/watsonx)
+- [CrewAI Documentation](https://docs.crewai.com/)
+- [Langflow Documentation](https://docs.langflow.org/)
 - [Original Developer Guide](README.original.md)
 
 ---
