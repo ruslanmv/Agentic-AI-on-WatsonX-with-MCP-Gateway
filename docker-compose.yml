@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: agentic-ai-postgres
+    environment:
+      POSTGRES_DB: agentic_ai
+      POSTGRES_USER: agentic_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentic_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agentic-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: agentic-ai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - agentic-network
+
+  # MCP Context Forge Gateway
+  mcp-gateway:
+    image: ghcr.io/ibm/mcp-contextforge-gateway:latest
+    container_name: mcp-contextforge-gateway
+    environment:
+      - DATABASE_URL=postgresql://agentic_user:${POSTGRES_PASSWORD:-change_this_password}@postgres:5432/mcp_gateway
+      - REDIS_URL=redis://redis:6379/0
+      - ENABLE_UI=true
+      - LOG_LEVEL=INFO
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - agentic-network
+
+  # Agentic AI Application
+  agentic-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agentic-ai-app
+    environment:
+      - DATABASE_URL=postgresql://agentic_user:${POSTGRES_PASSWORD:-change_this_password}@postgres:5432/agentic_ai
+      - REDIS_URL=redis://redis:6379/1
+      - MCP_GATEWAY_URL=http://mcp-gateway:8080
+      - WATSONX_API_KEY=${WATSONX_API_KEY}
+      - WATSONX_PROJECT_ID=${WATSONX_PROJECT_ID}
+      - WATSONX_URL=${WATSONX_URL:-https://us-south.ml.cloud.ibm.com}
+      - WATSONX_MODEL=${WATSONX_MODEL:-ibm/granite-13b-chat-v2}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_SEARCH_ENGINE_ID=${GOOGLE_SEARCH_ENGINE_ID}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - MAX_CONCURRENT_AGENTS=5
+      - AGENT_TIMEOUT=60
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mcp-gateway:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - agentic-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  agentic-network:
+    driver: bridge
